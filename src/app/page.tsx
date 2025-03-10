@@ -1,16 +1,18 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Container, Typography, Button, Box, AppBar, Toolbar, Paper } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import TaskList from '@/components/TaskList';
 import TaskForm from '@/components/TaskForm';
+import ThemeToggle from '@/components/ThemeToggle';
 import { Task, TaskFormData } from '@/types/task';
 
 export default function Home() {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [currentTask, setCurrentTask] = useState<Task | undefined>(undefined);
+  const taskListRef = useRef<{ fetchTasks: () => Promise<void> } | null>(null);
 
   const handleOpenForm = () => {
     setIsFormOpen(true);
@@ -41,6 +43,11 @@ export default function Home() {
       if (!response.ok) {
         throw new Error('Failed to create task');
       }
+      
+      // Refresh the task list after creating a task
+      if (taskListRef.current) {
+        await taskListRef.current.fetchTasks();
+      }
     } catch (error) {
       console.error('Error creating task:', error);
       throw error;
@@ -61,6 +68,11 @@ export default function Home() {
 
       if (!response.ok) {
         throw new Error('Failed to update task');
+      }
+      
+      // Refresh the task list after updating a task
+      if (taskListRef.current) {
+        await taskListRef.current.fetchTasks();
       }
     } catch (error) {
       console.error('Error updating task:', error);
@@ -83,6 +95,7 @@ export default function Home() {
           <Typography variant="h6" component="h1" className="flex-grow">
             Task List Management
           </Typography>
+          <ThemeToggle />
         </Toolbar>
       </AppBar>
 
@@ -102,7 +115,10 @@ export default function Home() {
         </Box>
 
         <Paper elevation={2} className="p-6">
-          <TaskList onEditTask={handleEditTask} />
+          <TaskList 
+            onEditTask={handleEditTask} 
+            ref={taskListRef}
+          />
         </Paper>
 
         <TaskForm 

@@ -122,7 +122,7 @@ const TaskForm: React.FC<TaskFormProps> = ({
       </DialogTitle>
       <form onSubmit={handleSubmit}>
         <DialogContent>
-          <Box className="space-y-4">
+          <Box className="space-y-6">
             <TextField
               name="title"
               label="Title"
@@ -133,9 +133,11 @@ const TaskForm: React.FC<TaskFormProps> = ({
               error={!!errors.title}
               helperText={errors.title}
               autoFocus
+              margin="normal"
             />
             
             <TextField
+              margin="normal"
               name="description"
               label="Description"
               value={formData.description}
@@ -145,8 +147,8 @@ const TaskForm: React.FC<TaskFormProps> = ({
               rows={3}
             />
             
-            <Box className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <FormControl fullWidth>
+            <Box className="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-4">
+              <FormControl fullWidth margin="normal">
                 <InputLabel id="status-label">Status</InputLabel>
                 <Select
                   labelId="status-label"
@@ -163,7 +165,7 @@ const TaskForm: React.FC<TaskFormProps> = ({
                 </Select>
               </FormControl>
               
-              <FormControl fullWidth>
+              <FormControl fullWidth margin="normal">
                 <InputLabel id="priority-label">Priority</InputLabel>
                 <Select
                   labelId="priority-label"
